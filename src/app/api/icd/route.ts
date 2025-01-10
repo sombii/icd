@@ -1,12 +1,11 @@
-import { getAllUsers } from '@/lib/db';
-import { NextResponse } from 'next/server';
+import {getDb} from "@/lib/db";
 
 export async function GET() {
   try {
-    const users = getAllUsers();
-    return NextResponse.json({ users });
+    const db = await getDb()
+    const data = await db.all('SELECT * FROM your_table')
+    return Response.json({ data })
+  } catch (error) {
+    return Response.json({ error: error.message }, { status: 500 })
   }
-catch (error) {
-    return NextResponse.json({ error });
-}
 }

@@ -1,7 +1,14 @@
-import Database from 'better-sqlite3';
+import sqlite3 from 'sqlite3'
+import { open } from 'sqlite'
 
-const db = new Database('./icd.db', { verbose: console.log, fileMustExist:true });
-export function getAllUsers() {
-  const stmt = db.prepare('SELECT * FROM icd');
-  return stmt.all();
+let db = null
+
+export async function getDb() {
+  if (!db) {
+    db = await open({
+      filename: './data/database.sqlite',
+      driver: sqlite3.Database
+    })
+  }
+  return db
 }
