@@ -1,10 +1,9 @@
-import {getDb} from "@/lib/db";
+import { getInitialBlocks} from "@/lib/db";
 
 export async function GET() {
   try {
-    const db = await getDb() as {all:(v:string) => unknown}
-    const data = await db.all('SELECT * FROM your_table')
-    return Response.json({ data })
+    const db = getInitialBlocks()
+    return Response.json({ db })
   } catch (error:unknown) {
     return Response.json({ error: (error as {message:string}).message }, { status: 500 })
   }

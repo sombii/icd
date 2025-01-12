@@ -1,14 +1,15 @@
-import sqlite3 from 'sqlite3'
-import { open } from 'sqlite'
+import Database from "better-sqlite3";
 
-let db:unknown = null
+const db = new Database("./icds.db", {
+  verbose: console.log,
+  fileMustExist: true,
+});
 
-export async function getDb() {
-  if (!db) {
-    db = await open({
-      filename: './data/database.sqlite',
-      driver: sqlite3.Database
-    })
-  }
-  return db
+export function getInitialBlocks() {
+  const stmt = db.prepare(
+      `SELECT * FROM icd 
+WHERE BlockId is NULL and ClassKind = 'chapter'
+ORDER BY BlockId`
+  );
+  return stmt.all();
 }
